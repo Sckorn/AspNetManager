@@ -1,0 +1,36 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Main.master.cs" Inherits="Master_Main" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head runat="server">
+        <link rel="stylesheet" type="text/css" href="~/Css/bootstrap.min.css" />
+        <title></title>
+        <asp:ContentPlaceHolder id="head" runat="server">
+        </asp:ContentPlaceHolder>
+    </head>
+    <body style="padding-top: 70px;">
+        <form id="MainMasterRootForm" runat="server">
+            <div id="MainMasterRoot" runat="server" style="margin: 0 auto; max-width: 960px; min-width: 720px;">
+                <div id="MainMasterHeader" runat="server">
+                    <div id="MainMasterMenu" runat="server">
+                        <nav class="navbar navbar-default navbar-fixed-top">
+                          <div class="container">
+                              <div class="navbar-header" runat="server" id="MainMasterNavbarHeader">
+                                  <asp:LinkButton ID="HomeLinkButton" PostBackUrl="~/Default.aspx" runat="server" CssClass="navbar-brand">Football Manager</asp:LinkButton>
+                              </div>
+                          </div>
+                        </nav>
+                    </div>
+                </div>
+                <div style="margin: 0 auto; width: 500px;">
+                    <div>
+                        <asp:ContentPlaceHolder id="MainBodyContent" runat="server">
+                            
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

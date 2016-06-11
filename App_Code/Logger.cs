@@ -62,7 +62,7 @@ namespace FootballManager
                 {
                     lock(writeLock)
                     {
-                        File.AppendAllText(logFile, String.Format("[{0}] | (T:{1}) : {2}\n", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss:ffffff"), Thread.CurrentThread.ManagedThreadId.ToString(), message));
+                        File.AppendAllText(logFile, String.Format("[{0}] | (T:{1})\t : {2}\n", DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss:ffffff"), Thread.CurrentThread.ManagedThreadId.ToString(), message));
                     }
                 }
             }

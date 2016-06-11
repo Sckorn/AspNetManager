@@ -14,11 +14,7 @@ public partial class _Default : System.Web.UI.Page
     {
         if (!IsPostBack)
         {
-            PGConnector db = new PGConnector(System.Configuration.ConfigurationManager.ConnectionStrings["MembershipConnectionPgsql"].ToString());
-            DataSet ds = db.ExecuteQuery("f_country_g", new string[] { "AFG" });
-
-            GridView1.DataSource = ds;
-            GridView1.DataBind();
+            
         }
     }
 }

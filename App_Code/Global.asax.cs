@@ -19,23 +19,29 @@ namespace FootballManager
             get; set;
         }
 
+        public static string DefaultConnectionString
+        {
+            get; set;
+        }
+
         public static PGConnector[] ConnectorsPool = new PGConnector[1];
 
         protected void Application_Start(object sender, EventArgs e)
         {
             Global.DefaultFactory = System.Configuration.ConfigurationManager.AppSettings["defaultFactory"];
+            Global.DefaultConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings[System.Configuration.ConfigurationManager.AppSettings["defaultConnectionString"]].ToString();
             Logger.Init();
             // Code that runs on application startup
-            Global.ConnectorsPool[0] = new PGConnector(System.Configuration.ConfigurationManager.ConnectionStrings["MembershipConnectionPgsql"].ToString());
+            Global.ConnectorsPool[0] = new PGConnector(Global.DefaultConnectionString);
             RoutesAdd(RouteTable.Routes);
             Logger.WriteToLog("Приложение запущено!");
-
         }
 
         private static void RoutesAdd(RouteCollection routes)
         {
             //routes.Add();
-            routes.MapPageRoute("test", "Login/", "~/Accounts/Login.aspx");
+            routes.MapPageRoute("", "Login/", "~/Accounts/Login.aspx");
+            routes.MapPageRoute("", "Register/", "~/Accounts/Register.aspx");
             Logger.WriteToLog("Маршруты УРЛ добавлены!");
         }
 

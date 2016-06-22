@@ -22,5 +22,7 @@ namespace FootballManager
         public DateTime LastPasswordChangeTime = DateTime.MinValue;
         public string PasswordQuestion = "";
         public string PasswordAnswer = "";
+
+        public bool IsApproved = false;
     }
 }

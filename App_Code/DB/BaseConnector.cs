@@ -114,6 +114,42 @@ namespace FootballManager.Database
             }            
         }
 
+        public Object ExecuteQueryScalar(string procName, string[] parameters)
+        {
+            sw.Reset();
+            sw.Start();
+
+            DbProviderFactory factory = DbProviderFactories.GetFactory(Global.DefaultFactory);
+            DbConnection connection = factory.CreateConnection();
+            connection.ConnectionString = _connectionString;
+            DbCommand cmd = factory.CreateCommand();
+
+            cmd.Connection = connection;
+            cmd.CommandType = CommandType.Text;
+
+            try
+            {
+                connection.Open();
+                cmd.CommandText = ConstructQueryString(procName, parameters);
+                cmd.Prepare();
+
+                object ret = cmd.ExecuteScalar();
+
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                _lastException = ex;
+                Logger.WriteToLog(String.Format("Ошибка выполнения запроса: {0}", ex.Message));
+                return new object();
+            }
+            finally
+            {
+                connection.Close();
+                sw.Stop();
+            }
+        }
+
         private string ConstructQueryString(string name, string[] parameters)
         {
             try

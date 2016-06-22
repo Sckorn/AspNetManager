@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Master/Main.master" CodeFile="Login.aspx.cs" Inherits="Accounts_Login" %>
 
 <asp:Content ID="MainLogin" ContentPlaceHolderID="MainBodyContent" runat="server">
-    <asp:Login ID="MainLoginForm" CssClass="form-horizontal" runat="server" EnableViewState="false" RenderOuterTable="true" style="width:100%;">
+    <asp:Login ID="MainLoginForm" CssClass="form-horizontal" runat="server" EnableViewState="false" RenderOuterTable="true" style="width:100%;" OnAuthenticate="MainLoginForm_Authenticate">
         <LayoutTemplate>
               <div class="form-group">
                 <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
@@ -31,7 +31,7 @@
               </div>
             <div class="form-group">
                 <div class="col-sm-offset-1 col-sm-12">
-                    Don't have an account?<asp:LinkButton runat="server" ID="RegisterLinkButton"> Register Now!</asp:LinkButton>
+                    Don't have an account? <asp:LinkButton runat="server" ID="RegisterLinkButton" PostBackUrl="/Register/">Register Now!</asp:LinkButton>
                 </div>
             </div>
         </LayoutTemplate>

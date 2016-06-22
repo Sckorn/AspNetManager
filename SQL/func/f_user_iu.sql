@@ -5,6 +5,7 @@ DROP FUNCTION f_user_iu(
 	_passwordquestion		varchar(128),
 	_passwordanswer			varchar(128),
 	_isapproved				int4,
+	_dtlastlogin			timestamp,
 	_userid					varchar(64)
 );
 
@@ -12,9 +13,10 @@ CREATE FUNCTION f_user_iu(
 	_username						varchar(128),
 	_password						varchar(20),
 	_email							varchar(128),
-	_passwordquestion		varchar(128),
-	_passwordanswer			varchar(128),
-	_isapproved					int4,
+	_passwordquestion				varchar(128),
+	_passwordanswer					varchar(128),
+	_isapproved						int4,
+	_dtlastlogin					timestamp,
 	_userid							varchar(64)
 )
 RETURNS INT4 AS 
@@ -35,13 +37,14 @@ if(_exaccid > 0) THEN
 		passwordanswer = _passwordanswer,
 		approved = _isapproved,
 		userid = _userid,
-		dtupdate = now()
+		dtupdate = now(),
+		dtlastlogin = _dtlastlogin
 	WHERE accountid = _exaccid and recstat > 0;
 
 	return _exaccid;
 ELSE
-	INSERT INTO taccounts(userid, username, password, email, passwordquestion, passwordanswer, approved, dtinsert, recstat)
-	VALUES(_userid, _username, _password, _email, _passwordquestion, _passwordanswer, _isapproved, now(), 1);
+	INSERT INTO taccounts(userid, username, password, email, loweredemail, passwordquestion, passwordanswer, approved, dtcreate, dtinsert, dtlastlogin, dtlastpasswordchange, recstat)
+	VALUES(_userid, _username, _password, _email, lower(_email), _passwordquestion, _passwordanswer, _isapproved, now(), now(), now(), now(), 1);
 
 	return currval('taccounts_seq'::regclass);
 end if;

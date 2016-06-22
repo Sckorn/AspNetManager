@@ -53,6 +53,7 @@ public class UserModel
             fmu.CreationDate = DateTime.Parse(dt.Rows[0]["dtcreate"].ToString());
             fmu.LastLogInDate = DateTime.Parse(dt.Rows[0]["dtlastlogin"].ToString());
             fmu.LastPasswordChangeTime = DateTime.Parse(dt.Rows[0]["dtlastpasswordchange"].ToString());
+            fmu.IsApproved = bool.Parse(dt.Rows[0]["approved"].ToString());
 
             _CurrentUser = fmu;
 
@@ -69,16 +70,141 @@ public class UserModel
         }
     }
 
+    public bool ValidateUser(string username, string email)
+    {
+        try
+        {
+            string[] parameters = {
+                username,
+                email
+            };
+
+            int res;
+            int.TryParse(bc.ExecuteQueryScalar("f_user_validate", parameters).ToString(), out res);
+
+            if (res == 0) return false;
+            else return true;
+        }
+        catch (Exception ex)
+        {
+            Logger.WriteToLog(String.Format("Ошибка валидации пользователя: {0}", ex.Message));
+            return false;
+        }
+    }
+
     public int CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey)
     {
         try
         {
+            int intBoolApproved = (isApproved ? 1 : 0);
 
+            string[] parameters = {
+                username,
+                password,
+                email,
+                passwordQuestion,
+                passwordAnswer,
+                intBoolApproved.ToString(),
+                providerUserKey.ToString()
+            };
+
+            int ret;
+            int.TryParse(bc.ExecuteQueryScalar("f_user_iu", parameters).ToString(), out ret);
+
+            return ret;
         }
         catch (Exception ex)
         {
             Logger.WriteToLog(String.Format("Ошибка регистрации пользователя: {0}", ex.Message));
+            return 0;
         }
-        throw new NotImplementedException("Work in progress");
+    }
+
+    public int UpdateUser()
+    {
+        try
+        {
+            int intBoolApproved = (_CurrentUser.IsApproved ? 1 : 0);
+
+            string[] parameters = {
+                _CurrentUser.UserName,
+                _CurrentUser.Password,
+                _CurrentUser.Email,
+                _CurrentUser.PasswordQuestion,
+                _CurrentUser.PasswordAnswer,
+                intBoolApproved.ToString(),
+                _CurrentUser.LastLogInDate.ToString(),
+                _CurrentUser.UserID.ToString()
+            };
+
+            int res;
+            int.TryParse(bc.ExecuteQueryScalar("f_user_iu", parameters).ToString(), out res);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            Logger.WriteToLog(String.Format("Ошибка обновления пользователя: {0}", ex.Message));
+            return 0;
+        }
+    }
+
+    public int UpdateUser(FMUser user)
+    {
+        try
+        {
+            if (_UserReceived)
+            {
+                if (!user.UserID.Equals(_CurrentUser.UserID))
+                {
+                    throw new Exception("Нельзя обновить данные пользователя отличного от текущего!");
+                }
+                else
+                {
+                    return UpdateUser();
+                }
+            }
+
+            int intBoolApproved = (user.IsApproved ? 1 : 0);
+
+            string[] parameters = {
+                user.UserName,
+                user.Password,
+                user.Email,
+                user.PasswordQuestion,
+                user.PasswordAnswer,
+                intBoolApproved.ToString(),
+                user.LastLogInDate.ToString(),
+                user.UserID.ToString()
+            };
+
+            int res;
+            int.TryParse(bc.ExecuteQueryScalar("f_user_iu", parameters).ToString(), out res);
+            return res;
+        }
+        catch (Exception ex)
+        {
+            Logger.WriteToLog(String.Format("Ошибка обновления пользователя: {0}", ex.Message));
+            return 0;
+        }
+    }
+
+    public int UpdateOnLogin(FMUser user)
+    {
+        try
+        {
+            string[] parameters = {
+                
+            };
+
+            int ret;
+            int.TryParse(bc.ExecuteQueryScalar("f_user_iu", parameters).ToString(), out ret);
+
+            return ret;
+        }
+        catch (Exception ex)
+        {
+            Logger.WriteToLog(String.Format("Ошибка обновления пользователя: {0}", ex.Message));
+            return 0;
+        }
     }
 }

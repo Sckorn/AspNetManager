@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
 using System.Web.Routing;
 using System.IO;
 
@@ -28,6 +29,11 @@ namespace FootballManager
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            ScriptManager.ScriptResourceMapping.AddDefinition("jquery", new ScriptResourceDefinition
+            {
+                Path = "~/Script/jquery-2.2.4.min.js",
+
+            });
             Global.DefaultFactory = System.Configuration.ConfigurationManager.AppSettings["defaultFactory"];
             Global.DefaultConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings[System.Configuration.ConfigurationManager.AppSettings["defaultConnectionString"]].ToString();
             Logger.Init();
